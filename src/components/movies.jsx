@@ -1,5 +1,7 @@
 import React, { Component } from "react";
+//import Proptypes from "prop-types";
 import Pagination from "../common/pagination";
+import { paginate } from "../utils/paginate";
 import { getMovies } from "../fakeMovieService";
 
 class Movies extends Component {
@@ -18,9 +20,11 @@ class Movies extends Component {
   };
   render() {
     const { length: count } = this.state.movies;
-    const { pageSize, currentPage } = this.state;
+    const { pageSize, currentPage, movies: allMovies } = this.state;
 
     if (count === 0) return <p> There is no movies in the database</p>;
+
+    const movies = paginate(allMovies, currentPage, pageSize);
 
     return (
       <>
@@ -36,7 +40,7 @@ class Movies extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.movies.map((movie) => (
+            {movies.map((movie) => (
               <tr key={movie._id}>
                 <td>{movie.title}</td>
                 <td>{movie.genre.name}</td>
