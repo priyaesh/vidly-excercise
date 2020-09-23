@@ -5,6 +5,7 @@ import ListGroup from "../common/listGroup";
 import { paginate } from "../utils/paginate";
 import { getMovies } from "../fakeMovieService";
 import { getGenres } from "../fakeGenreService";
+import { get } from "lodash";
 
 class Movies extends Component {
   state = {
@@ -15,7 +16,8 @@ class Movies extends Component {
   };
 
   componentDidMount() {
-    this.setState({ movies: getMovies(), genre: getGenres() });
+    const genre = [{ name: "All Genres" }, ...getGenres()];
+    this.setState({ movies: getMovies(), genre });
   }
   handleOnClick = (movie) => {
     console.log("Button Clicked", movie);
@@ -39,9 +41,10 @@ class Movies extends Component {
 
     if (count === 0) return <p> There is no movies in the database</p>;
 
-    const filtered = selectedGenre
-      ? allMovies.filter((m) => m.genre._id === selectedGenre._id)
-      : allMovies;
+    const filtered =
+      selectedGenre && selectedGenre._id
+        ? allMovies.filter((m) => m.genre._id === selectedGenre._id)
+        : allMovies;
 
     console.log("filtered", filtered);
 
